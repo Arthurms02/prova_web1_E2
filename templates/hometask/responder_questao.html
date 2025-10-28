@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="col-lg-10 col-12 overflow-auto">
+    <!-- Cabeçalho Principal -->
+    {% include "partials/_header.html" %}
+    <!-- Seção da Questão -->
+    <section class="p-4 p-md-5">
+        <div class="question-card p-4 p-md-5">
+            <a href="#">Editar</a>
+            <a href="#">Excluir</a>
+            <!-- Enunciado -->
+            <div class="enunciado mb-4">
+                {{ questao.enunciado }}
+
+                <!-- IMAGEM DA TABELA -->
+                <div class="text-center my-4">
+                    <img src="https://placehold.co/400x200/F0F4F8/343a40?text=Tabela" alt="Tabela com dados de fósseis"
+                        class="img-fluid enunciado-image">
+                </div>
+            </div>
+
+            <!-- Formulário de Resposta -->
+            <form method="POST" action="{% url 'hometask:detalhe_questao' materia_slug=questao.materia.slug pk=questao.pk %}"
+                novalidate>
+                {% csrf_token %}
+                <div class="alternatives-list">
+            
+                    {% for radio in form.resposta %}
+                    <div class="form-check p-0 mb-2">
+            
+                        <!-- ✅ CORREÇÃO: name deve ser "resposta" -->
+                        <input type="radio" class="btn-check" name="resposta" id="{{ radio.id_for_label }}"
+                            value="{{ radio.data.value }}" autocomplete="off">
+            
+                        <label class="btn alternative-label w-100 rounded-pill" for="{{ radio.id_for_label }}">
+                            <span class="fw-bold me-2">{{ radio.data.value }})</span> {{ radio.choice_label }}
+                        </label>
+                    </div>
+                    {% endfor %}
+            
+                </div>
+            
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-answer rounded-pill">Responder</button>
+                </div>
+            </form>
+        
+
+        <!-- INÍCIO DA PAGINAÇÃO (Voltar/Avançar) -->
+       {% if materia %}
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <!-- Questão anterior -->
+                {% if anterior_questao %}
+                    <a href="{% url 'hometask:detalhe_questao' materia_slug=materia.slug pk=anterior_questao.pk %}" 
+                       class="btn btn-outline-primary">
+                        <i class="bi bi-chevron-left me-1"></i>
+                        Anterior
+                    </a>
+                {% else %}
+                    <span class="btn btn-outline-secondary disabled">
+                        <i class="bi bi-chevron-left me-1"></i>
+                        Anterior
+                    </span>
+                {% endif %}
+
+                <!-- Próxima questão -->
+                {% if proxima_questao %}
+                    <a href="{% url 'hometask:detalhe_questao' materia_slug=materia.slug pk=proxima_questao.pk %}" 
+                       class="btn btn-outline-primary">
+                        Próximo
+                        <i class="bi bi-chevron-right ms-1"></i>
+                    </a>
+                {% else %}
+                    <span class="btn btn-outline-secondary disabled">
+                        Próximo
+                        <i class="bi bi-chevron-right ms-1"></i>
+                    </span>
+                {% endif %}
+            </div>
+        {% endif %}
+        <!-- FIM DA PAGINAÇÃO -->
+        </div>
+    </section>
+</main>
+{% endblock %}

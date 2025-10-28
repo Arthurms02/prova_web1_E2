@@ -1,0 +1,92 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff ;
+}
+
+.hero-card {
+    border-width: 4px !important;
+    max-width: 42rem;
+    bottom: 10rem;
+}
+
+
+.bg-image-use-offline {
+    background-image: url('images/not-logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 350px;
+    border-radius: 50%;
+    width: 350px;
+    height: 350px;
+    margin: 0 auto;
+}
+
+.bg-image-professors {
+    background-image: url('images/img-professores.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    min-height: 350px;
+    border-radius: 50%;
+    width: 350px;
+    height: 350px;
+    margin: 0 auto;
+}
+
+.hero-bg {
+    background-image: url('images/fundo-img.png');
+    background-size: cover;
+    background-position: bottom center;
+    padding-top: 20rem;
+    padding-bottom: 40rem;
+}
+
+.logo{
+    background-image: url('images/logo-sem-fundo-redimencionado.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 50px;
+    width: 50px;
+}
+
+.professors-section {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.professors-section:hover {
+    background-color: #4a88be !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.use-offline {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.use-offline:hover {
+    background-color: #4a88be !important;
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.use-offline:hover h2,
+.use-offline:hover p {
+    color: white !important;
+}
+
+.professors-section:hover h2,
+.professors-section:hover p {
+    color: white !important;
+}
+
+.img-footer {
+    background: url('images/footer.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+}

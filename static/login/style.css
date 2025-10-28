@@ -1,0 +1,86 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-image: url('images/backgroun.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
+    overflow-x: hidden;
+    position: relative;
+}
+
+
+.auth-card {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 450px;
+    z-index: 10;
+}
+
+.nav-tabs {
+    border-bottom: none;
+    display: flex;
+}
+
+.nav-tabs .nav-link {
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem 0 0 0.5rem;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.nav-tabs .nav-link:last-child {
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #343a40;
+    color: white;
+    border-color: #343a40;
+}
+
+.btn-login {
+    background-color: #8bc34a;
+    /* Verde do botão */
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.75rem;
+    width: 100%;
+}
+
+.btn-login:hover {
+    background-color: #7cb342;
+    color: white;
+}
+
+.logo-container {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    border-radius: 1rem;
+    background-color: #e0f7fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00796b;
+}
+
+@media (max-width: 768px) {
+    .bg-icon {
+        display: none;
+    }
+
+    .auth-card {
+        padding: 1.5rem;
+    }
+}

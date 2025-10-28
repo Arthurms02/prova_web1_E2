@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="col-lg-10 col-12 overflow-auto">
+    <!-- Cabeçalho Principal -->
+    {% include "partials/_header.html" %}
+    <!-- Seção do Banco de Questões -->
+    <section class="p-4 p-md-5">
+        <h1 class="mb-4 fw-bold">Banco de Questões</h1>
+
+        <!-- Filtros de Matéria -->
+        <div class="mb-4 d-flex flex-wrap">
+            <a href="{% url 'hometask:lista_questoes' %}" class="btn filter-btn rounded-pill px-3 me-2 mb-2 {% if materia_atual is None %} active {% endif %}">Todas as Matérias</a>
+            {% for materia in materias_disponiveis %}
+            <a href="{% url 'hometask:lista_questoes_por_materia' materia.slug %}" class="btn filter-btn rounded-pill px-3 me-2 mb-2 {% if materia_atual.slug == materia.slug %} active {% endif %}">{{ materia.nome }}</a>
+            {% endfor %}
+        </div>
+        <!-- Painel de Questões -->
+        <div class="question-panel">
+            <div class="list-group list-group-flush question-list">
+                {% for questao in questoes %}
+                <a href="{% url 'hometask:detalhe_questao' materia_slug=questao.materia.slug pk=questao.pk %}"
+                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    {{ questao.enunciado|truncatechars:100 }}
+                </a>
+                {% empty %}
+
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- INÍCIO DA PAGINAÇÃO -->
+        <nav aria-label="Paginação" class="mt-4">
+            <ul class="pagination justify-content-center">
+                                
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">&laquo;</span>
+                                    </li>
+                                {% endif %}
+        
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+        
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">&raquo;</span>
+                                    </li>
+                                {% endif %}
+                               
+            </ul>
+        </nav>
+        <!-- FIM DA PAGINAÇÃO -->
+    </section>
+</main>
+{% endblock %}

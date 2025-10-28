@@ -1,0 +1,14 @@
+{% load perfil_tags %}
+<header class="main-header p-3 d-flex justify-content-between align-items-center sticky-top">
+    <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
+        aria-controls="sidebarMenu">
+        <i class="bi bi-list fs-3"></i>
+    </button>
+    <h5 class="d-lg-none mb-0">Home Task</h5>
+    <div class="ms-auto">
+        <div class="d-flex align-items-center">
+            <span class="me-2 fw-bold d-none d-md-inline">{{ NOME_USUARIO }}</span>
+            <img src="{{ AVATAR_URL }}" alt="Avatar do Usuário" class="user-avatar">
+        </div>
+    </div>
+</header>

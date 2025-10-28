@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<!-- Conteúdo Principal -->
+        <main class="col-lg-10 col-12 vh-100 overflow-auto">
+            <!-- Cabeçalho Principal -->
+            {% include "partials/_header.html" %}
+            <!-- Seção de Criar Questões -->
+            <section class="p-4 p-md-5">
+                <h1 class="mb-4 fw-bold">Criar Questões</h1>
+                
+                <div class="form-card shadow-sm">
+                    <h2 class="fs-4 fw-bold mb-4">Nova Questão</h2>
+                    
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Materia -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Materia</label>
+                            {{ form.materia }} <!-- Renderize o campo do form do Django aqui -->
+                        </div>
+
+                        <!-- Enunciado -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Enunciado</label>
+                            {{ form.enunciado }} 
+                        </div>
+
+                        <!-- Imagem -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Imagem</label>
+                            <div class="image-upload-box rounded" onclick="document.getElementById('imagemInput').click();">
+                                <i class="bi bi-arrow-down-circle fs-2"></i>
+                                <span>Clique para fazer upload</span>
+                            </div>
+                            <!-- Input de arquivo escondido -->
+                             <!-- {{ form.imagem }} --> <!-- Deixe o input do Django invisível e ative pelo clique na div -->
+                             <input type="file" id="imagemInput" name="imagem" class="d-none" accept="image/*">
+                        </div>
+
+                        <!-- Alternativas -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Alternativas</label>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">A)</span>
+                                {{ form.alternativa_a }}
+                                
+                            </div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">B)</span>
+                                {{ form.alternativa_b }} 
+    
+                            </div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">C)</span>
+                               {{ form.alternativa_c }}
+                               
+                            </div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">D)</span>
+                               {{ form.alternativa_d }}
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text">E)</span>
+                              {{ form.alternativa_e }}
+                            </div>
+                        </div>
+
+                        <!-- Resposta Correta -->
+                        <div class="mb-4">
+                            <label for="resposta_correta" class="form-label fw-bold">Resposta Correta</label>
+                            {{ form.resposta_correta }} 
+                        
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary rounded-pill">Salvar Questão</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+{% endblock %}
