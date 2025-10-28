@@ -120,7 +120,5 @@ class QuestaoDetailView(LoginRequiredMixin,DetailView):
 
             messages.error(request, "⚠️ Você precisa selecionar uma alternativa.")
 
-        # O PASSO CRÍTICO: Redireciona de volta para a mesma página.
-        # A sintaxe **self.kwargs passa automaticamente {'materia_slug': ..., 'pk': ...}
-        # para a função de redirect, resolvendo o NoReverseMatch de forma elegante.
+
         return redirect('hometask:detalhe_questao', **self.kwargs)
