@@ -5,6 +5,8 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from perfil.models import PerfilUsuario
 from perfil.forms import EditarPerfilForm
+from perfil.validators import validar_email_institucional,validar_email_institucional_professor,validar_tipo_avatar,validar_tamanho_avatar
+
 
 
 class PerfilView(LoginRequiredMixin, TemplateView):
@@ -30,21 +32,30 @@ class EditarPerfilView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """Lógica customizada quando form é válido"""
         # Salva o form primeiro
-        self.object = form.save()
-        
+        form.save()
+        email_institucional = form.cleaned_data.get('email_institucional')
         # Mensagens customizadas baseadas no email
-        if form.cleaned_data.get('email_institucional'):
+        if email_institucional:
             messages.success(
                 self.request,
-                "✅ Perfil atualizado! Email institucional foi validado e salvo."
+                "✅ Perfil atualizado com sucesso! Email institucional registrado."
             )
         else:
             messages.info(
                 self.request,
                 "📝 Perfil atualizado! Você pode adicionar um email institucional depois."
             )
-        
+
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        """Lógica customizada quando form é inválido"""
+        messages.error(
+            self.request,
+            "❌ Erro ao atualizar o perfil. Verifique os dados e tente novamente."
+        )
+        return super().form_invalid(form)
+
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

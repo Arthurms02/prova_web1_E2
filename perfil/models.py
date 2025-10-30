@@ -1,7 +1,7 @@
 from django.db import models
 from django.templatetags.static import static
 from accounts.models import Usuario
-from perfil.validators import validar_tamanho_avatar, validar_tipo_avatar, upload_path_avatar, validar_email_institucional
+from perfil.validators import validar_tamanho_avatar, validar_tipo_avatar, upload_path_avatar,validar_email_institucional, validar_email_institucional_professor
 
 
 
@@ -29,8 +29,10 @@ class PerfilUsuario(BaseModel):
     email_institucional = models.EmailField(
         blank=True,
         null=True,
+        default=None,
         verbose_name='Email Institucional',
         unique=True,
+        validators=[validar_email_institucional]
     )
 
     class Meta:
@@ -46,13 +48,14 @@ class PerfilUsuario(BaseModel):
         """
         Sobrescreve o método save para validar o email institucional antes de salvar
         """
+
         if self.email_institucional:
-            valido, resultado = validar_email_institucional(self.email_institucional)
-            if not valido:
-                raise ValueError(resultado)
-            self.email_institucional = resultado
-            self.usuario.is_professor = True
-            self.usuario.save()
+            if validar_email_institucional_professor(self.email_institucional):
+                self.usuario.is_professor = True
+                self.usuario.save()
+            else:
+                self.usuario.is_professor = False
+                self.usuario.save()
         super().save(*args, **kwargs)
 
     def get_avatar_url(self):
@@ -61,5 +64,5 @@ class PerfilUsuario(BaseModel):
             return self.avatar.url
         else:
             first_letter = self.usuario.first_name[0].upper() if self.usuario.first_name else 'U'
-            return static(f"styles/images/perfil_80X80/{first_letter}_80.png")
+            return static(f"perfil/images/perfil_80X80/{first_letter}_80.png")
     
