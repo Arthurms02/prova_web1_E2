@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from .managers import CustomUserManager
+from .managers import CustomUserManager, UsuarioManager
 
 
 
@@ -10,6 +10,7 @@ class BaseModel(models.Model):
     """
     criado_em = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     atualizado_em = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
+    user_deletado = models.BooleanField(default=False, verbose_name='Usuário Deletado')
 
     class Meta:
         abstract = True 
@@ -50,12 +51,6 @@ class Usuario(BaseModel, AbstractBaseUser, PermissionsMixin):
         help_text='Identifica se o usuário é um professor.'
     )
     
-    is_active = models.BooleanField(
-        default=True,
-        verbose_name='Active',
-        help_text='Identifica se o usuário deve ser tratado como ativo, ao invés de deletar contas.'
-    )
-    
     date_joined = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Data de cadastro'
@@ -63,6 +58,7 @@ class Usuario(BaseModel, AbstractBaseUser, PermissionsMixin):
     
     # Conecta o manager customizado
     objects = CustomUserManager()
+    todos_objects = UsuarioManager()
     
     # Define que o email será usado para login
     USERNAME_FIELD = 'email'
@@ -83,6 +79,11 @@ class Usuario(BaseModel, AbstractBaseUser, PermissionsMixin):
     def nome_completo(self):
         """Retorna o nome completo do usuário"""
         return f"{self.first_name} {self.last_name}".strip()
+    
+    def delete(self):
+        """Marca o usuário como deletado sem removê-lo do banco de dados"""
+        self.user_deletado = True
+        self.save()
     
 
 

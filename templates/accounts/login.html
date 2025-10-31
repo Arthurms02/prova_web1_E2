@@ -33,7 +33,9 @@
         </ul>
         
         <h2 class="text-center fw-bold mb-4 fs-4">Acesse sua Conta</h2>
-        {% if messages %}
+
+        {% include 'partials/_message.html' %}
+        <!-- {% if messages %}
             <div class="alert-container mb-3">
                 {% for message in messages %}
                     <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
@@ -53,7 +55,7 @@
                     </div>
                 {% endfor %}
             </div>
-        {% endif %}
+        {% endif %} -->
         
         <!-- Formulário de Login -->
         <form method="POST" novalidate>

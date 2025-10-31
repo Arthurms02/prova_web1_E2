@@ -1,12 +1,13 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, UpdateView
+from django.forms import ValidationError
+from django.views.generic import TemplateView, UpdateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from perfil.models import PerfilUsuario
 from perfil.forms import EditarPerfilForm
-from perfil.validators import validar_email_institucional,validar_email_institucional_professor,validar_tipo_avatar,validar_tamanho_avatar
-
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from perfil.validators import validar_email_institucional_aluno, validar_email_institucional_professor, validar_tamanho_avatar, validar_tipo_avatar
 
 
 class PerfilView(LoginRequiredMixin, TemplateView):
@@ -32,14 +33,33 @@ class EditarPerfilView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """Lógica customizada quando form é válido"""
         # Salva o form primeiro
-        form.save()
         email_institucional = form.cleaned_data.get('email_institucional')
-        # Mensagens customizadas baseadas no email
+        
+        avatar = form.cleaned_data.get('avatar')
+        # Valida o avatar se fornecido
+        if avatar:
+            try:
+                validar_tamanho_avatar(avatar)
+                validar_tipo_avatar(avatar)
+            except ValidationError as e:
+                messages.error(
+                    self.request,
+                    f"❌ Erro ao atualizar foto de perfil. {str(e)}"
+                )
+                return super().form_invalid(form)
+            
+        # Mensagens customizadas baseadas no email institucional
         if email_institucional:
-            messages.success(
-                self.request,
-                "✅ Perfil atualizado com sucesso! Email institucional registrado."
-            )
+            if validar_email_institucional_professor(email_institucional):
+                messages.success(
+                    self.request,
+                    "🎓 Perfil atualizado! Email institucional reconhecido como professor."
+                )
+            elif validar_email_institucional_aluno(email_institucional):
+                messages.success(
+                    self.request,
+                    "🎒 Perfil atualizado! Email institucional reconhecido como aluno."
+                )
         else:
             messages.info(
                 self.request,
@@ -50,13 +70,29 @@ class EditarPerfilView(LoginRequiredMixin, UpdateView):
     
     def form_invalid(self, form):
         """Lógica customizada quando form é inválido"""
+        
+
         messages.error(
             self.request,
-            "❌ Erro ao atualizar o perfil. Verifique os dados e tente novamente."
+            "❌ Erro ao atualizar o perfil. Email institucional inválido."
         )
+
         return super().form_invalid(form)
 
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+
+class ExcluirPerfilView(LoginRequiredMixin, View):
+    
+    def post(self, request, *args, **kwargs):
+        perfil = request.user.perfil
+        # Marca o usuário como deletado
+        perfil.usuario.delete()
+        perfil.delete()
+
+        # Desloga o usuário
+        logout(request)
+        messages.warning(
+            request,
+            'Seu perfil foi excluído. Se desejar, entre em contato com o suporte para reativação.'
+        )
+        return redirect('login')

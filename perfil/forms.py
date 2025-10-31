@@ -1,7 +1,7 @@
 from django import forms
 from perfil.models import PerfilUsuario
-from perfil.validators import validar_email_institucional
-from django.core.exceptions import ValidationError
+
+
 
 class EditarPerfilForm(forms.ModelForm):
     class Meta:
@@ -24,9 +24,4 @@ class EditarPerfilForm(forms.ModelForm):
             'data_nascimento': 'Data de Nascimento',
         }
     
-    
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tem_avatar'] = bool(self.object.avatar)
-        return context

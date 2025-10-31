@@ -21,7 +21,7 @@
                 {% for questao in questoes %}
                 <a href="{% url 'hometask:detalhe_questao' materia_slug=questao.materia.slug pk=questao.pk %}"
                     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    {{ questao.enunciado|truncatechars:100 }}
+                    {{ questao.enunciado|truncatechars:250 }}
                 </a>
                 {% empty %}
 

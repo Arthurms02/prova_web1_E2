@@ -1,10 +1,11 @@
-from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Questao, Materia
-from .forms import ResponderQuestaoForm, CreateQuestaoForm
+from .forms import EditarQuestaoForm, ResponderQuestaoForm, CreateQuestaoForm
 from django.contrib import messages
 from django.shortcuts import get_object_or_404 , redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 class CriarQuestaoView(LoginRequiredMixin, CreateView):
@@ -25,7 +26,7 @@ class ListarQuestoesView(LoginRequiredMixin,ListView):
     model = Questao
     template_name = 'hometask/listar_questao.html'
     context_object_name = 'questoes'
-    paginate_by = 2
+    paginate_by = 3
     
     def get_materia(self):
         """Retorna a matéria baseada no slug da URL"""
@@ -76,7 +77,7 @@ class QuestaoDetailView(LoginRequiredMixin,DetailView):
         context = super().get_context_data(**kwargs)
         questao_atual = self.get_object()
         
-        # ✅ CORREÇÃO: Navegação baseada em data de criação
+
         materia_slug = self.kwargs.get('materia_slug')
         
         if materia_slug:
@@ -122,3 +123,34 @@ class QuestaoDetailView(LoginRequiredMixin,DetailView):
 
 
         return redirect('hometask:detalhe_questao', **self.kwargs)
+
+
+class EditarQuestaoView(LoginRequiredMixin, UpdateView):
+    model = Questao
+    form_class = EditarQuestaoForm
+    template_name = 'hometask/editar_questao.html'
+
+    def get_success_url(self):
+        materia_slug = self.kwargs.get('materia_slug')
+        return reverse('hometask:lista_questoes_por_materia', kwargs={'materia_slug': materia_slug})
+
+    def get_object(self, queryset=None):
+        materia_slug = self.kwargs.get('materia_slug')
+        questao_id = self.kwargs.get('pk')
+        materia = get_object_or_404(Materia, slug=materia_slug)
+        return get_object_or_404(Questao, pk=questao_id, materia=materia)
+
+
+class ExcluirQuestaoView(LoginRequiredMixin, DeleteView):
+    model = Questao
+    success_url = reverse_lazy('hometask:lista_questoes')
+
+    def get_success_url(self):
+        materia_slug = self.kwargs.get('materia_slug')
+        return reverse('hometask:lista_questoes_por_materia', kwargs={'materia_slug': materia_slug})
+
+    def get_object(self, queryset=None):
+        materia_slug = self.kwargs.get('materia_slug')
+        questao_id = self.kwargs.get('pk')
+        materia = get_object_or_404(Materia, slug=materia_slug)
+        return get_object_or_404(Questao, pk=questao_id, materia=materia)

@@ -20,11 +20,21 @@
 
             <!-- Card de informações do perfil -->
             <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-end mb-3">
+                <div class="d-card-body p-4">
+                    <div class="d-flex flex-direction-row justify-content-between">
+                    <div class="d-flex justify-content-start mb-3">
                         <a href="{% url 'editar_perfil' %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-pencil-fill me-2"></i>Editar Perfil
                         </a>
+                    </div>
+                    <form method="POST" action="{% url 'excluir_perfil' %}">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-end mb-3">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash-fill me-2"></i>Excluir Perfil
+                            </button>
+                        </div>
+                    </form>
                     </div>
 
                     <form>

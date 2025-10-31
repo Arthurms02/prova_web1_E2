@@ -23,21 +23,20 @@
                         <!-- Card de identificação -->
                         <div class="card shadow-sm mb-4">
                             <div class="card-body p-4 d-flex align-items-center">
-                                {% if tem_avatar %}
                                 <label class="avatar-upload-container me-4">
                                     <img src="{{ AVATAR_URL }}" alt="Avatar do Usuário"
                                         class="profile-avatar-lg" >
-                                    <div class="avatar-edit-overlay">
-                                        <i class="bi bi-pencil-fill"></i> Editar
-                                    </div>
-                                </label>
-                                {% else %}
-                                <label class="avatar-upload-container me-4">
                                     {{ form.avatar }} 
                                 </label>
-                                {% endif %}
                                 <h2 class="fw-bold mb-0">{{ NOME_USUARIO }}</h2>
                             </div>
+                            {% if form.avatar.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.avatar.errors %}
+                                    <small class="d-block">{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
         
                         <!-- Card de informações do perfil -->

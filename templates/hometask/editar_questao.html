@@ -8,17 +8,11 @@
             {% include "partials/_header.html" %}
             <!-- Seção de Criar Questões -->
             <section class="p-4 p-md-5">
-                <h1 class="mb-4 fw-bold">Criar Questões</h1>
-                    {% if form.errors %}
-                                <div class="text-danger mt-1">
-                                    {% for error in form.errors %}
-                                    <small class="d-block">{{ error }}</small>
-                                    {% endfor %}
-                                </div>
-                    {% endif %}
+                <h1 class="mb-4 fw-bold">Editar Questão</h1>
+                
                 <div class="form-card shadow-sm">
-                    <h2 class="fs-4 fw-bold mb-4">Nova Questão</h2>
-                    
+                    <h2 class="fs-4 fw-bold mb-4">Editar Questão</h2>
+
                     <form method="POST" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
 
@@ -75,7 +69,7 @@
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary rounded-pill">Salvar Questão</button>
+                            <button type="submit" class="btn btn-primary rounded-pill">Editar Questão</button>
                         </div>
                     </form>
                 </div>

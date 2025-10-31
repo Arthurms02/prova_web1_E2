@@ -13,12 +13,18 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = True
 
     def form_valid(self, form):
+        usuario = form.get_user()
+
+        if hasattr(usuario, 'user_deletado') and usuario.user_deletado:
+            messages.error(
+                self.request,
+                'A conta associada a este email foi deletada. '
+                'Por favor, entre em contato com o suporte para mais informações.'
+            )
+            return self.form_invalid(form)
+        
         messages.success(self.request, 'Login realizado com sucesso!')
         return super().form_valid(form)
-    # def form_invalid(self, form):
-    #     messages.error(self.request, 'Credenciais inválidas. Por favor, tente novamente.')
-    #     return super().form_invalid(form)
-    
 
 
 

@@ -11,6 +11,7 @@ class BaseModel(models.Model):
     """
     criado_em = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     atualizado_em = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
+    perfil_deletado = models.BooleanField(default=False, verbose_name='Perfil Deletado')
 
     class Meta:
         abstract = True
@@ -24,7 +25,6 @@ class PerfilUsuario(BaseModel):
     avatar = models.ImageField(upload_to=upload_path_avatar, validators=[validar_tamanho_avatar, validar_tipo_avatar], blank=True, null=True, verbose_name='Avatar')
     telefone = models.CharField(max_length=15, blank=True, verbose_name='Telefone')
     data_nascimento = models.DateField(blank=True, null=True, verbose_name='Data de Nascimento')
-    is_active = models.BooleanField(default=True, verbose_name='Ativo')
     # Email institucional do usuário
     email_institucional = models.EmailField(
         blank=True,
@@ -41,7 +41,14 @@ class PerfilUsuario(BaseModel):
 
     def __str__(self):
         return f"Perfil de {self.usuario.nome_completo}"
+    
 
+    def delete(self):
+        """
+        Sobrescreve o método delete para marcar o perfil como deletado em vez de removê-lo do banco
+        """
+        self.perfil_deletado = True
+        self.save()
 
 
     def save(self, *args, **kwargs):

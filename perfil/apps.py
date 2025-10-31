@@ -5,6 +5,4 @@ class PerfilConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'perfil'
 
-    
-    def ready(self):
-        import perfil.signals
+

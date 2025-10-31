@@ -7,16 +7,25 @@
     <!-- Seção da Questão -->
     <section class="p-4 p-md-5">
         <div class="question-card p-4 p-md-5">
-            <a href="#">Editar</a>
-            <a href="#">Excluir</a>
+            {% if questao.autor == request.user.perfil %}
+            <div class="d-flex flex-direction-row justify-content-between mb-3">
+                <a class="btn btn-outline-primary" href="{% url 'hometask:editar_questao' materia_slug=questao.materia.slug pk=questao.pk %}">Editar</a>
+                <form action="{% url 'hometask:excluir_questao' materia_slug=questao.materia.slug pk=questao.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger">Excluir</button>
+                </form>
+            </div>
+            {% endif %}
             <!-- Enunciado -->
             <div class="enunciado mb-4">
                 {{ questao.enunciado }}
 
                 <!-- IMAGEM DA TABELA -->
                 <div class="text-center my-4">
-                    <img src="https://placehold.co/400x200/F0F4F8/343a40?text=Tabela" alt="Tabela com dados de fósseis"
-                        class="img-fluid enunciado-image">
+                    {% if questao.complemento %}
+                        <img src="{{ questao.complemento.url }}" alt="Imagem da Questão"
+                            class="img-fluid rounded shadow-sm enunciado-image">
+                    {% endif %}
                 </div>
             </div>
 
@@ -29,7 +38,6 @@
                     {% for radio in form.resposta %}
                     <div class="form-check p-0 mb-2">
             
-                        <!-- ✅ CORREÇÃO: name deve ser "resposta" -->
                         <input type="radio" class="btn-check" name="resposta" id="{{ radio.id_for_label }}"
                             value="{{ radio.data.value }}" autocomplete="off">
             

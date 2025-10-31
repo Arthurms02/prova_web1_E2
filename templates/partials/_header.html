@@ -6,9 +6,11 @@
     </button>
     <h5 class="d-lg-none mb-0">Home Task</h5>
     <div class="ms-auto">
-        <div class="d-flex align-items-center">
-            <span class="me-2 fw-bold d-none d-md-inline">{{ NOME_USUARIO }}</span>
-            <img src="{{ AVATAR_URL }}" alt="Avatar do Usuário" class="user-avatar">
-        </div>
+        <a  class="d-flex align-items-center text-decoration-none text-dark" href="{% url 'perfil' %}">
+            <div class="d-flex align-items-center">
+                <span class="me-2 fw-bold d-none d-md-inline">{{ NOME_USUARIO }}</span>
+                <img src="{{ AVATAR_URL }}" alt="Avatar do Usuário" class="user-avatar">
+            </div>
+        </a>
     </div>
 </header>

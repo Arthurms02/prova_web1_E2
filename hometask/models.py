@@ -1,6 +1,7 @@
 from django.db import models
 from perfil.models import PerfilUsuario
 import uuid
+from hometask.validators import upload_path_complemento
 
 
 class BaseModel(models.Model):
@@ -25,7 +26,7 @@ class Questao(BaseModel):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     enunciado = models.TextField()
-    complemento = models.ImageField(upload_to='questoes/', null=True, blank=True)
+    complemento = models.ImageField(upload_to=upload_path_complemento, null=True, blank=True)
     alternativa_a = models.CharField(max_length=500, null=True, blank=True)
     alternativa_b = models.CharField(max_length=500, null=True, blank=True)
     alternativa_c = models.CharField(max_length=500, null=True, blank=True)
